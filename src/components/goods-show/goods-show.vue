@@ -156,16 +156,16 @@
       }
       this.theRequest = theRequest
       this.$store.state.shelfCode = theRequest.ShelfCode
-      // axios.get('../api/AjaxAPI/GetGoodsInfo' + this.url)
-      axios.get(url + '/goods')
+      axios.get('../api/AjaxAPI/GetGoodsInfo' + this.url)
+      // axios.get(url + '/goods')
       .then(res => {
         this.goodsData = res.data.Data
       })
       .catch(err => {
         console.log(err)
       });
-      // axios.get('../api/AjaxAPI/GetSelectCoupons?WechatId=' + this.user.OpenId + '&ShelfCode=' + this.$store.state.shelfCode + '&DataType=' + 0 + '&PageIndex=' + 1 + '&PageSize=' + 10)
-      axios.get(url + '/youhuiquanselect')
+      axios.get('../api/AjaxAPI/GetSelectCoupons?WechatId=' + this.user.OpenId + '&ShelfCode=' + this.$store.state.shelfCode + '&DataType=' + 0 + '&PageIndex=' + 1 + '&PageSize=' + 10)
+      // axios.get(url + '/youhuiquanselect')
       .then(res => {
         if(res.data.Data.CouponsInfoList.length != 0){
           this.isShowYouhui = true

@@ -21,7 +21,7 @@
             <div class="detail-item-text">{{goods.GoodsName}}</div>
             <div class="detail-item-right">
               <div class="detail-item-num">{{goods.Qty}}份</div>
-              <div class="detail-item-price"><span class="detail-item-price-left">￥</span><span class="detail-item-price-right">{{goods.Qty*goods.GoodsDiscPrice}}</span></div>
+              <div class="detail-item-price"><span class="detail-item-price-left">￥</span><span class="detail-item-price-right">{{goods.TotalAmount}}</span></div>
             </div>
           </div>
           <!-- <div class="detail-more">点击加载更多</div> -->
@@ -34,6 +34,7 @@
 <script type="text/javascript">
   import axios from 'axios'
   import {url} from 'api/config'
+  import {accAdd,accSub,accMul,accDiv} from 'api/calculate'
 
   export default {
     data() {
@@ -43,7 +44,7 @@
       }
     },
     activated() {
-      axios.get('./api/AjaxAPI/GetOrderDetail?OrderCode=' + this.$store.state.orderCode)
+      axios.get('../api/AjaxAPI/GetOrderDetail?OrderCode=' + this.$store.state.orderCode)
       // axios.get(url + '/orderDetail')
       .then(res => {
         this.orderDetail = res.data.Data
