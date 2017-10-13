@@ -22,16 +22,24 @@ fastclick.attach(document.body)
 
 Vue.use(Vuex);
 const  vuex_store = new Vuex.Store({
-    state:{
-        youhui_select:"",
-        isShowMask:false,
-        maskContent:''
-    },
-    mutations:{
-        showUserName(state){
-            alert(state.youhui_select);
-        }
+  state:{
+    youhui_select:"",
+    isShowMask:false,
+    maskContent:'',
+    shelfCode:'',
+    isSelect:false,
+    user:window.page,
+    orderCode: ''
+  },
+  mutations:{
+    setIsShowMask(state){
+      state.isShowMask = true
+      let timer = setTimeout(() => {
+        state.isShowMask = false
+        clearTimeout(timer)
+      },2000)
     }
+  }
 })
 
 /* eslint-disable no-new */

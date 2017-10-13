@@ -1,29 +1,31 @@
 <template>
   <!-- <transition name="slide"> -->
-    <div class="detail" ref="detail">
-      <div class="detail-top">
-        <div class="detail-shiji"><span class="detail-shiji-left">实际支付:</span><span class="detail-shiji-small">￥</span><span class="detail-shiji-price">{{orderDetail.TotalAmount}}</span></div>
-        <div class="detail-youhui"><span class="detail-youhui-left">活动优惠</span><span class="detail-youhui-price">-{{orderDetail.CouAmt}}</span></div>
-      </div>
-      <div class="detail-title">
-        <svg class="icon" aria-hidden="true" style="width:10px;height:42px;vertical-align: middle;">
-          <use xlink:href="#icon-icon"></use>
-        </svg>
-        <span style="vertical-align: middle;font-size: 14px;margin:0 5px;">购物明细</span>
-        <svg class="icon" aria-hidden="true" style="width:10px;height:42px;vertical-align: middle;">
-          <use xlink:href="#icon-icon"></use>
-        </svg>
-      </div>
-      <div class="detail-list">
-        <div class="detail-item" v-for="goods in orderDetail.OrderGoodsList">
-          <div class="detail-item-pic"></div>
-          <div class="detail-item-text">{{goods.GoodsName}}</div>
-          <div class="detail-item-right">
-            <div class="detail-item-num">{{goods.Qty}}份</div>
-            <div class="detail-item-price"><span class="detail-item-price-left">￥</span><span class="detail-item-price-right">{{goods.Qty*goods.GoodsPrice}}</span></div>
-          </div>
+    <div class="detail">
+      <div>
+        <div class="detail-top">
+          <div class="detail-shiji"><span class="detail-shiji-left">实际支付:</span><span class="detail-shiji-small">￥</span><span class="detail-shiji-price">{{orderDetail.TotalAmount}}</span></div>
+          <div class="detail-youhui"><span class="detail-youhui-left">活动优惠</span><span class="detail-youhui-price">-{{orderDetail.CouAmt}}</span></div>
         </div>
-        <!-- <div class="detail-more">点击加载更多</div> -->
+        <div class="detail-title">
+          <svg class="icon" aria-hidden="true" style="width:10px;height:42px;vertical-align: middle;">
+            <use xlink:href="#icon-icon"></use>
+          </svg>
+          <span style="vertical-align: middle;font-size: 14px;margin:0 5px;">购物明细</span>
+          <svg class="icon" aria-hidden="true" style="width:10px;height:42px;vertical-align: middle;">
+            <use xlink:href="#icon-icon"></use>
+          </svg>
+        </div>
+        <div class="detail-list">
+          <div class="detail-item" v-for="goods in orderDetail.OrderGoodsList">
+            <div class="detail-item-pic" :style="{backgroundImage: 'url('+goods.GoodsImg[0].ImgUrl+')'}"></div>
+            <div class="detail-item-text">{{goods.GoodsName}}</div>
+            <div class="detail-item-right">
+              <div class="detail-item-num">{{goods.Qty}}份</div>
+              <div class="detail-item-price"><span class="detail-item-price-left">￥</span><span class="detail-item-price-right">{{goods.Qty*goods.GoodsDiscPrice}}</span></div>
+            </div>
+          </div>
+          <!-- <div class="detail-more">点击加载更多</div> -->
+        </div>
       </div>
     </div>
   <!-- </transition> -->
@@ -37,10 +39,12 @@
     data() {
       return {
         orderDetail: [],
+        detailScroll: {}
       }
     },
-    created(){
-      axios.get(url + '/orderDetail')
+    activated() {
+      axios.get('./api/AjaxAPI/GetOrderDetail?OrderCode=' + this.$store.state.orderCode)
+      // axios.get(url + '/orderDetail')
       .then(res => {
         this.orderDetail = res.data.Data
       })
@@ -62,16 +66,17 @@
   //   transform: translate3d(100%, 0, 0)
 
   .detail{
-    position:fixed;
-    top:0
-    left:0;
-    right:0;
-    bottom:0;
+    // position:fixed;
+    // top:0
+    // left:0;
+    // right:0;
+    // bottom:0;
     width:100%;
-    height:100%;
-    z-index:200;
+    // height:100%;
+    z-index:300;
     overflow:scroll;
     -webkit-overflow-scrolling : touch;
+    background:#f3f5f9;
     .detail-top{
       width:100%;
       height:130px;
@@ -114,6 +119,7 @@
     }
     .detail-list{
       width:100%;
+      padding-bottom:2px;
       .detail-item{
         margin:0 auto 15px;
         width:92%;
@@ -127,9 +133,11 @@
           float:left;
           width:50px;
           height:50px;
-          background-color:#ccc;
           margin-right:8px;
           margin-top: 7px;
+          background-size:cover;
+          background-position:center;
+          background-repeat:no-repeat;
         }
         .detail-item-text{
           float:left;

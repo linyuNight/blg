@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div class="main-mask" v-show="isShowMask">
+    <div class="main-mask" v-show="count">
       <div class="main-mask-contain">
         <div class="main-mask-content">{{content}}</div>
       </div>
@@ -11,27 +11,20 @@
 <script type="text/javascript">
 
   export default {
-    data() {
-      return {
-        isShowMask: false,
-        content:'请选择商品'
+    computed: {
+      count () {
+        return this.$store.state.isShowMask
+      },
+      content() {
+        return this.$store.state.maskContent
       }
-    },
-    created() {
-      this.isShowMask = this.$store.state.isShowMask
-    },
-    activated() {
-      console.log(1)
-    },
-    methods:{
-
     }
   }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
   .fade-enter-active, .fade-leave-active {
-    transition: opacity .5s;
+    transition: opacity .3s;
   }
   .fade-enter, .fade-leave-active {
     opacity: 0;
@@ -43,8 +36,8 @@
     top:0;
     right:0;
     bottom:0;
-    background:rgba(0,0,0,.7);
-    z-index:20;
+    background:rgba(0,0,0,.5);
+    z-index:1000;
     .main-mask-contain{
       position: absolute
       top: 50%
@@ -52,10 +45,10 @@
       transform: translate(-50%, -50%)
       .main-mask-content{
         background:rgba(0,0,0,.8);
-        padding:5px 20px;
+        padding:10px 12px;
         border-radius:5px;
-        color:#999;
-        font-size:14px;
+        color:#fff;
+        font-size:16px;
       }
     }
   }
