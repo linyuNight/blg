@@ -38,11 +38,11 @@
     bottom:0;
     background:rgba(0,0,0,.5);
     z-index:1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     .main-mask-contain{
-      position: absolute
-      top: 50%
-      left: 50%
-      transform: translate(-50%, -50%)
+      max-width:80%;
       .main-mask-content{
         background:rgba(0,0,0,.8);
         padding:10px 12px;

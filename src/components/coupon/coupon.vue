@@ -15,7 +15,9 @@
           <div class="right-text">{{youhuiquan.UseDesc}}</div>
         </div>
       </div>
-      <div class="youhuiquan-more" @click="loadYouhui" v-show="isShowYouhuiMore">点击加载更多</div>
+      <div class="youhuiquan-more-contain">
+        <div class="youhuiquan-more" @click="loadYouhui" v-show="isShowYouhuiMore">点击加载更多</div>
+      </div>
     </div>
   </div>
   <!-- </transition> -->
@@ -39,7 +41,7 @@
     activated() {
       this.youhuiquanList = []
       this.youhuiIndex = 0
-      axios.get('../api/AjaxAPI/GetSelectCoupons?WechatId=' + this.user.OpenId + '&ShelfCode=' + this.$store.state.shelfCode + '&DataType=' + 0 + '&PageIndex=' + 1 + '&PageSize=' + 10)
+      axios.get('../api/AjaxAPI/GetSelectCoupons?ThirdId=' + this.user.OpenId + '&ShelfCode=' + this.$store.state.shelfCode + '&DataType=' + 1 + '&PageIndex=' + 1 + '&PageSize=' + 10)
       // axios.get(url + '/youhuiquanselect')
       .then(res => {
         this.youhuiquanList = res.data.Data.CouponsInfoList
@@ -55,7 +57,7 @@
       loadYouhui(){
 
         this.isShowYouhuiMore = false
-        axios.get('../api/AjaxAPI/GetSelectCoupons?WechatId=' + this.user.OpenId + '&ShelfCode=' + this.$store.state.shelfCode + '&DataType=' + 0 + '&PageIndex=' + this.youhuiIndex + '&PageSize=' + 10)
+        axios.get('../api/AjaxAPI/GetSelectCoupons?ThirdId=' + this.user.OpenId + '&ShelfCode=' + this.$store.state.shelfCode + '&DataType=' + 1 + '&PageIndex=' + this.youhuiIndex + '&PageSize=' + 10)
         // axios.get(url + '/youhuiquanselect')
         .then(res => {
           this.youhuiquanList = this.youhuiquanList.concat(res.data.Data.CouponsInfoList)
@@ -171,11 +173,14 @@
           }
         }
       }
-      .youhuiquan-more{
+      .youhuiquan-more-contain{
         width:100%;
-        text-align: center;
-        color:#444;
-        margin-bottom:48px;
+        height:70px;
+        .youhuiquan-more{
+          width:100%;
+          text-align: center;
+          color:#444;
+        }
       }
     }
   }

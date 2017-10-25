@@ -1,29 +1,35 @@
 <template>
   <div class="goods-show" ref="recommend">
     <div class="goods-show-title">
-      <svg class="icon" aria-hidden="true" style="height:18px;margin-top:9px;width:100%;">
+      <div class="saoyisao" @click="saiMiao">
+        <div class="sao-text">切换柜台</div>
+      </div>
+      <svg class="icon" aria-hidden="true" style="height:18px;margin-top:11px;width:100%;">
         <use xlink:href="#icon-logo"></use>
       </svg>
-      <router-link tag="div" class="account-pic" to="/account"></router-link>
+      <router-link tag="div" class="account-pic" to="/account">
+        <div class="account-text">我的</div>
+      </router-link>
     </div>
-    <div class="bigcontain">
+    <div class="bigcontain" ref="bigWrapper">
       <div class="bigcontent">
         <div class="goods-list-box" v-for="goodsList in goodsData.GoodsList">
           <div class="goods-list-title">
-            <svg class="icon" aria-hidden="true" style="width:10px;height:42px;vertical-align: middle;">
+            <svg v-for="svg in svgList" class="icon" aria-hidden="true" style="width:10px;height:42px;vertical-align: middle;margin:0 1px;">
               <use xlink:href="#icon-icon"></use>
             </svg>
             <span style="vertical-align: middle;font-size: 14px;margin:0 5px;">{{goodsList.Level | changeLan}}层</span>
-            <svg class="icon" aria-hidden="true" style="width:10px;height:42px;vertical-align: middle;">
+            <svg v-for="svg in svgList" class="icon" aria-hidden="true" style="width:10px;height:42px;vertical-align: middle;margin:0 1px;">
               <use xlink:href="#icon-icon"></use>
             </svg>
           </div>
-          <div class="goods-list-contain">
+          <div class="goods-list-contain clear">
             <div class="goods-list-contain-col clear">
               <div class="list-goods" v-for="goods in goodsList.GoodsInfoList">
-                <div class="goods-pic" :style="{backgroundImage: 'url('+goods.GoodsImg[0].ImgUrl+')'}"></div>
+                <div class="goods-pic" :style="{backgroundImage: goods.GoodsImg.length>0?'url('+goods.GoodsImg[0].ImgUrl+')':'url('+''+')'}"></div>
                 <div class="goods-name">{{goods.GoodsName}}</div>
-                <div><div class="new-prise" :class="{redcolor: goods.GoodsDiscPrice!=goods.GoodsPrice}"><span class="new-prise-left">￥</span><span class="new-prise-right">{{goods.GoodsDiscPrice}}</span></div><s class="old-prise" v-if="goods.GoodsDiscPrice!=goods.GoodsPrice">￥{{goods.GoodsPrice}}</s><div class="plus-btn" @click="plusbtn(goods)"></div></div>
+                <div class="clear" v-if="goods.CurrQty>0"><div class="new-prise" :class="{redcolor: goods.GoodsDiscPrice!=goods.GoodsPrice}"><span class="new-prise-left">￥</span><span class="new-prise-right">{{goods.GoodsDiscPrice}}</span></div><s class="old-prise" v-if="goods.GoodsDiscPrice!=goods.GoodsPrice">￥{{goods.GoodsPrice}}</s><div class="plus-btn" @click="plusbtn(goods)"></div></div>
+                <div class="clear quehuo" v-if="goods.CurrQty<=0">缺货</div>
               </div>
             </div>
           </div>
@@ -53,7 +59,9 @@
     <div class="main-bottom-contain">
       <transition name="fold">
         <div class="main-goods-mask" v-show="isShowMask" transition="fold">
-          <div class="mask-goods-title">已选商品({{purchaseNum}})</div>
+          <div class="mask-goods-title">已选商品({{purchaseNum}})
+            <div class="clear-list" @click="clearList">清空购物车</div>
+          </div>
           <div class="mask-goods-list">
             <transition-group name="list" tag="p">
             <div class="mask-goods-item clear" v-for="purchasegoods in purchaseList" :key="purchasegoods.GoodsCode">
@@ -77,15 +85,16 @@
           </router-link>
         </div>
       </transition>
-      <div class="main-bottom">
-        <div class="purchase-icon" :class="{duang: isDuang}" ref="purchase" @click="toShowMask">
+      <div class="main-bottom" @click="toShowMask">
+        <div class="purchase-icon" :class="{duang: isDuang}" ref="purchase">
         </div>
         <div class="purchase-goods-num" v-show="purchaseNum">{{purchaseNum}}</div>
         <div class="purchase-price" :class="{pricemargintop: !allReduce}">
           <div class="heji-contain"><span class="heji">合计：</span><span class="heji-small">￥</span><span class="heji-num">{{allPrice}}</span></div>
           <div class="jiesheng-price" v-show="allReduce">已优惠：￥{{allReduce}}</div>
         </div>
-        <div class="price-btn" @click="pay">结算</div>
+        <div class="price-btn" v-show="!isShowMask">结算</div>
+        <div class="price-btn topay" v-show="isShowMask" @click="pay">确认支付</div>
       </div>
     </div>
     <div class="ball-container">
@@ -106,10 +115,12 @@
   import qs from 'qs'
   import {url} from 'api/config'
   import {accAdd,accSub,accMul,accDiv} from 'api/calculate'
+  import BScroll from 'better-scroll'
 
   export default {
     data() {
       return {
+        svgList: [1,2,3,4,5,6,7,8,9,10,11],
         isShowMask: false,
         isShowWant: false,
         isShowYouhui: false,
@@ -141,7 +152,9 @@
         }, {
           show: false
         }],
-        dropBalls: []
+        dropBalls: [],
+        orderCode: '',
+        isCanPay: true
       }
     },
     created(){
@@ -160,14 +173,21 @@
       // axios.get(url + '/goods')
       .then(res => {
         this.goodsData = res.data.Data
+        this.$nextTick(() => {
+          var jroll = new BScroll(this.$refs.bigWrapper, {
+            click:true,
+            deceleration:.002,
+            momentumLimitDistance:2,
+          });
+        })
       })
       .catch(err => {
         console.log(err)
       });
-      axios.get('../api/AjaxAPI/GetSelectCoupons?WechatId=' + this.user.OpenId + '&ShelfCode=' + this.$store.state.shelfCode + '&DataType=' + 0 + '&PageIndex=' + 1 + '&PageSize=' + 10)
+      axios.get('../api/AjaxAPI/GetSelectCoupons?ThirdId=' + this.user.OpenId + '&ShelfCode=' + this.$store.state.shelfCode + '&DataType=' + 1 + '&PageIndex=' + 1 + '&PageSize=' + 10)
       // axios.get(url + '/youhuiquanselect')
       .then(res => {
-        if(res.data.Data.CouponsInfoList.length != 0){
+        if(res.data.Data.CouponsInfoList != null){
           this.isShowYouhui = true
         }
       })
@@ -259,13 +279,21 @@
       }
     },
     methods:{
+      saiMiao(){
+        this.$store.state.scanQRCode()
+      },
+      clearList(){
+        this.purchaseList = []
+        this.isShowMask = false
+        this.changePurchaseNum()
+      },
       showMainMask(content){
         this.$store.state.maskContent = content
-        this.$store.commit('setIsShowMask')
+        this.$store.dispatch("setIsShowMask")
       },
       submitWant(){
         let data = {
-          WechatId:this.$store.state.user.OpenId,
+          ThirdId:this.$store.state.user.OpenId,
           Text:this.submitMessage
         }
         axios.post('../api/AjaxAPI/SubmitUserWantEat',qs.stringify(data))
@@ -328,11 +356,17 @@
           el.style.display = 'none'
         }
       },
-      toShowMask(){
-        if(this.purchaseList.length>0){
-          this.isShowMask = !this.isShowMask
-        }else{
-          this.showMainMask('请选择商品')
+      toShowMask(e){
+        if(e.target.className != 'topay'){
+          if(this.purchaseList.length>0){
+            if(e.target.className == 'purchase-icon'){
+              this.isShowMask = !this.isShowMask
+            }else{
+              this.isShowMask = true
+            }
+          }else{
+            this.showMainMask('请选择商品')
+          }
         }
       },
       hideShowMask(e){
@@ -449,75 +483,135 @@
         }
       },
       pay() {
-        this.isYouhui()
-        var that = this
-        if(this.purchaseList.length == 0){
-          this.showMainMask('请选择商品')
-        }else{
-          this.submitOrder()
-          if(this.allPrice > 0){
-            this.orderType = 1
-          }else{
-            this.orderType = 0
-          }
-          var parm = {
-              ShelfCode: that.theRequest.ShelfCode,
-              WechatId: this.$store.state.user.OpenId,//微信OpenId，唯一标识
-              PayType: that.orderType,//支付类型：0：余额/优惠券/币等支付完成；1：部分或完全金额使用微信
-              PaySource: 2,//支付来源：1：PC；2：微信；3：IOS；4：Android；
-              OrderType: that.orderType,//订单类型，0：正常订单（不涉及第三方订单）；1：微信订单（公众平台订单）
-              GoodsDetailList: this.myOrder,//商品明细集合
-              TotalAmount: this.totalPrice,//订单总金额
-              UseBalance: 0,//使用余额
-              CouCode: this.payYouhuiquan.BLGNum?this.payYouhuiquan.BLGNum:"",//优惠券编号
-              CouAmt: this.payYouhuiquan.ParValue?this.payYouhuiquan.ParValue:0,//优惠券金额
-              ThirdAmt: this.allPrice,// 第三方金额
-              IP: this.$store.state.user.UserIp//IP地址
-          };
-
-          $.ajax({
-              url: "../api/AjaxAPI/SubmitOrder",
-              data: JSON.stringify(parm),
-              type: "POST",
-              contentType: "application/json;charset=utf-8",
-              dataType: "json",
-              beforeSend: function (XMLHttpRequest) {
-
-              },
-              complete: function (data, textStatus) {
-
-              },
-              success: function (json) {
-                  if (json.Status != 200) {
-                      that.showMainMask(json.Msg)
-                  } else {
-                      if (that.orderType == 1) {
-                          var WeChatPublic = json.Data.WechatPublicOrderInfo;
-                          if (WeChatPublic != null) {
-                              that.onBridgeReady(WeChatPublic.AppId,
-                                  WeChatPublic.Noncestr,
-                                  WeChatPublic.Timestamp,
-                                  WeChatPublic.Package,
-                                  WeChatPublic.SignType,
-                                  WeChatPublic.PaySign);
-                          }
-                      } else if (createOrderType == 0) {
-                          window.location.href = "/MsgPage/Success";
-                      }
-                      else {
-                          that.showMainMask("系统错误，请稍候再试。")
-                      }
-                  }
-              },
-              error: function (XMLHttpRequest, textStatus, errorThrown) {
-                  if (XMLHttpRequest.responseText.indexOf("用户中心-登录") == -1) {
-                      that.showMainMask("网络链接错误，请稍候再试。")
-                  }
-                  window.location.reload();
+        if(this.isShowMask){
+          var that = this
+          if(that.isCanPay){
+            that.isCanPay = false
+            this.isYouhui()
+            if(this.purchaseList.length == 0){
+              this.showMainMask('请选择商品')
+            }else{
+              this.submitOrder()
+              if(this.allPrice > 0){
+                this.orderType = 1
+              }else{
+                this.orderType = 0
               }
-          });
+              var parm = {
+                  ShelfCode: that.theRequest.ShelfCode,
+                  ThirdId: this.$store.state.user.OpenId,//微信OpenId，唯一标识
+                  PayType: that.orderType,//支付类型：0：余额/优惠券/币等支付完成；1：部分或完全金额使用微信
+                  PaySource: 2,//支付来源：1：PC；2：微信；3：IOS；4：Android；
+                  OrderType: that.orderType,//订单类型，0：正常订单（不涉及第三方订单）；1：微信订单（公众平台订单）
+                  GoodsDetailList: this.myOrder,//商品明细集合
+                  TotalAmount: this.totalPrice,//订单总金额
+                  UseBalance: 0,//使用余额
+                  CouCode: this.payYouhuiquan.BLGNum?this.payYouhuiquan.BLGNum:"",//优惠券编号
+                  CouAmt: this.payYouhuiquan.ParValue?this.payYouhuiquan.ParValue:0,//优惠券金额
+                  ThirdAmt: this.allPrice,// 第三方金额
+                  IP: this.$store.state.user.UserIp//IP地址
+              };
+
+              $.ajax({
+                  url: "../api/AjaxAPI/SubmitOrder",
+                  data: JSON.stringify(parm),
+                  type: "POST",
+                  contentType: "application/json;charset=utf-8",
+                  dataType: "json",
+                  beforeSend: function (XMLHttpRequest) {
+                  },
+                  complete: function (data, textStatus) {
+                    that.isCanPay = true
+                  },
+                  success: function (json) {
+                      that.isCanPay = true
+                      that.orderCode = json.Data != null?json.Data.OrderCode:''
+                      if (json.Status != 200) {
+                          that.showMainMask(json.Msg)
+                      } else {
+                          if (that.orderType == 1) {
+                              var WeChatPublic = json.Data.WechatPublicOrderInfo;
+                              if (WeChatPublic != null) {
+                                  that.onBridgeReady(WeChatPublic.AppId,
+                                      WeChatPublic.Noncestr,
+                                      WeChatPublic.Timestamp,
+                                      WeChatPublic.Package,
+                                      WeChatPublic.SignType,
+                                      WeChatPublic.PaySign);
+                              }
+                          } else if (that.orderType == 0) {
+                            if(json.Data.IsCompletePay){
+                              that.payReload()
+                            }
+                          }
+                          else {
+                              that.showMainMask("系统错误，请稍候再试。")
+                          }
+                      }
+                      
+                  },
+                  error: function (XMLHttpRequest, textStatus, errorThrown) {
+                      that.isCanPay = true
+                      if (XMLHttpRequest.responseText.indexOf("用户中心-登录") == -1) {
+                          that.showMainMask("网络链接错误，请稍候再试。")
+                      }
+                      window.location.reload();
+                  }
+              });
+            }
+          }
+        }else{
+          if(this.purchaseList.length == 0){
+              this.showMainMask('请选择商品')
+          }else{
+            this.isShowMask = true            
+          }
         }
-        
+      },
+      payReload() {
+        this.isShowMask= false
+        this.isShowWant= false
+        this.isShowYouhui= false
+        this.isShowYouhuiDetail= false
+        this.isDuang= false
+        this.notePrice= 0
+        this.goodsData= []
+        this.purchaseList= []
+        this.myOrder= []
+        this.submitMessage= ''
+        this.purchaseNum= 0
+        this.totalPrice= 0
+        this.allPrice= 0
+        this.allReduce= 0
+        this.orderType= 0
+        this.youhuiquan= {}
+        this.payYouhuiquan= {}
+        this.isCanPay= true
+        this.$store.state.youhui_select = ''
+        this.$store.state.isSelect = false,
+        axios.get('../api/AjaxAPI/GetGoodsInfo' + this.url)
+        // axios.get(url + '/goods')
+        .then(res => {
+          this.goodsData = res.data.Data
+          this.$nextTick(() => {
+            // var jroll = new JRoll(this.$refs.bigWrapper, {});
+            var jroll = new BScroll(this.$refs.bigWrapper, {});
+          })
+          axios.get('../api/AjaxAPI/GetSelectCoupons?ThirdId=' + this.user.OpenId + '&ShelfCode=' + this.$store.state.shelfCode + '&DataType=' + 1 + '&PageIndex=' + 1 + '&PageSize=' + 10)
+          // axios.get(url + '/youhuiquanselect')
+          .then(res => {
+            if(res.data.Data.CouponsInfoList != null){
+              this.isShowYouhui = true
+              location.href = "/MsgPage/PaySuccess?OrderCode=" + this.orderCode;
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          });
+        })
+        .catch(err => {
+          console.log(err)
+        });
       },
       onBridgeReady(appid, nonceStr, timeStamp, pack, signType, paySign) {
         var that = this
@@ -537,7 +631,7 @@
                     return;
                 }
                 if (res.err_msg.indexOf("ok") != -1) {
-                    location.href = '/MsgPage/Success';
+                    that.payReload()
                 } else if (res.err_msg.indexOf("cancel") != -1) {
                     that.showMainMask("支付失败：支付过程中用户取消")
                 } else {
@@ -629,8 +723,33 @@
       top:0;
       left:0;
       width:100%;
-      height:35px;
+      height:40px;
       background:$yellow;
+      .saoyisao{
+        padding:6px 6px;
+        width:60px;
+        height:40px;
+        position:fixed;
+        left:8px;
+        top:0;
+        // background:center no-repeat;
+        background:url('../../common/image/sao.png') center 6px no-repeat;
+        // bg-image('../../common/image/sao')
+        // background-image:url('../../common/image/sao.png');
+        // background-size:18px 23px;
+        background-size:20px 20px;
+        z-index: 11;
+        .sao-text{
+          transform:scale(.8);
+          transform-origin:50%;
+          font-size:12px;
+          position:absolute;
+          top:22px;
+          right:0;
+          width:100%;
+          text-align:center;
+        }
+      }
       .title-pic{
         margin:0 auto;
       }
@@ -638,35 +757,48 @@
         extend-click()
         padding:6px 6px;
         width:30px;
-        height:35px;
+        height:40px;
         position:fixed;
-        right:6px;
+        right:8px;
         top:0;
-        background:center no-repeat;
+        // background:center no-repeat;
+        background:center 6px no-repeat
         bg-image('../../common/image/user');
-        background-size:18px 23px;;
+        // background-size:18px 23px;
+        background-size:15px 18px
         z-index: 11;
+        .account-text{
+          transform:scale(.8);
+          transform-origin:50%;
+          font-size:12px;
+          position:absolute;
+          top:22px;
+          right:0;
+          width:100%;
+          text-align:center;
+        }
       }
     }
     .bigcontain{
       position:fixed;
-      top:35px;
+      top:40px;
       left:0;
       right:0;
       bottom:49px;
-      overflow:scroll;
-      -webkit-overflow-scrolling : touch;
+      // overflow:scroll;
+      // -webkit-overflow-scrolling : touch;
       .goods-list-box{
         height:auto;
         width:100%;
-        margin-bottom:8px;
         background:#fff;
         .goods-list-title{
+          position:relative;
           width:100%;
-          height:42px;
-          line-height: 42px;
+          height:50px;
+          line-height: 50px;
           text-align: center;
           background:#fff;
+          overflow:hidden;
         }
         .goods-list-contain{
           .goods-list-contain-col{
@@ -682,6 +814,7 @@
                 margin-right:0;
               }
               .goods-pic{
+                margin:0 auto;
                 width:100%;
                 max-width:100px;
                 height:133px;
@@ -693,9 +826,19 @@
                 margin:0 auto;
                 width:100px;
                 font-size: 13px;
-                height:60px;
-                line-height: 60px;
-                text-align: left;
+                height:30px;
+                line-height: 30px;
+                text-align: center;
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow:ellipsis;
+              }
+              .quehuo{
+                text-align:center;
+                font-size:14px;
+                color:#666;
+                height:20px;
+                line-height:20px;
               }
               .new-prise{
                 float:left;
@@ -735,9 +878,6 @@
               }
             }
           }
-        }
-        &:last-child{
-          margin-bottom: 0;
         }
       }
     }
@@ -852,16 +992,24 @@
         background:#fff;
         transform: translate3d(0, -100%, 0)
         .mask-goods-title{
+          position:relative;
           height:40px;
           line-height: 40px;
           borderbottom-1px(#e8e8e8)
           font-size: 14px;
           color:#000;
+          .clear-list{
+            right:0;
+            top:0;
+            position:absolute;
+            color:$red;
+          }
         }
         .mask-goods-list{
           max-height:214px;
           overflow-x: hidden;
           overflow-y: scroll;
+          -webkit-overflow-scrolling : touch;
           .mask-goods-item{
             margin-bottom:27px;
             height:20px;

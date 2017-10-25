@@ -1,8 +1,10 @@
 <template>
   <div id="app">
-    <keep-alive>
-      <router-view></router-view>
-    </keep-alive>
+    <!-- <transition :name="direction" mode="out-in"> -->
+      <keep-alive>
+        <router-view></router-view>
+      </keep-alive>
+    <!-- </transition> -->
     <main-mask></main-mask>
   </div>
 </template>
@@ -13,9 +15,25 @@
   export default {
     components: {
       MainMask
-    }
+    },
+    // computed: {
+
+    //   direction () {
+    //     const viewDir = this.$store.state.viewDirection
+    //     let tranName = ''
+
+    //     if (viewDir === 'left') {
+    //       tranName = 'view-out'
+    //     } else if (viewDir === 'right') {
+    //       tranName = 'view-in'
+    //     } else {
+    //       tranName = 'fade'
+    //     }
+
+    //     return tranName
+    //   },
+    // }
   }
 </script>
 
-<style scoped lang="stylus" rel="stylesheet/stylus">
-</style>
+<style scoped lang="stylus" rel="stylesheet/stylus"></style>

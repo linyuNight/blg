@@ -32,13 +32,14 @@
             <div class="right-text">{{youhuiquan.UseDesc}}</div>
           </div>
         </div>
-        <div class="youhuiquan-more" @click="loadYouhui" v-show="isShowYouhuiMore">点击加载更多</div>
+        <div class="youhuiquan-more-contain">
+          <div class="youhuiquan-more" @click="loadYouhui" v-show="isShowYouhuiMore">点击加载更多</div>
+        </div>
       </div>
       <div v-show="!left" class="order-list">
         <div class="order-item" v-for="order in orderList" :key="order.OrderCode" @click="selectOrder(order.OrderCode)">
           <div class="order-item-top">
             <div class="order-item-top-left">
-              <!-- <span class="order-item-top-left-day">2017.12.3</span><span class="order-item-top-left-time">16:23</span> -->
               <span class="order-item-top-left-day">{{order.CreateDate}}</span>
             </div>
             <div class="order-item-top-right">
@@ -54,7 +55,9 @@
             <div class="order-item-bottom-right">共{{ order.OrderGoodsList | caculateNum }}件</div>
           </div>
         </div>
-        <div class="order-more" @click="loadOrder" v-show="isShowOrderMore">点击加载更多</div>
+        <div class="order-more-contain">
+          <div class="order-more" @click="loadOrder" v-show="isShowOrderMore">点击加载更多</div>
+        </div>
       </div>
     </div>
   </div>
@@ -80,42 +83,8 @@
       }
     },
     created(){
-      this.left = true
-      // axios.get(url + '/youhuiquan')
-      // .then(res => {
-      //   this.youhuiquanList = res.data.Data.CouponsInfoList
-      // })
-      // .catch(err => {
-      //   console.log(err)
-      // });
-      axios.get('../api/AjaxAPI/GetMyCoupons?WechatId=' + this.user.OpenId + '&DataType=' + 0 + '&PageIndex=' + 1 + '&PageSize=' + 10)
-      // axios.get(url + '/youhuiquan')
-      .then(res => {
-        this.youhuiquanList = res.data.Data.CouponsInfoList
-        this.youhuiIndex = ++res.data.Data.PageIndex
-        if(res.data.Data.DataCount > this.youhuiquanList.length){
-          this.isShowYouhuiMore = true
-        }else{
-          this.isShowYouhuiMore = false
-        }
-      })
-      axios.get('../api/AjaxAPI/GetOrderList?WechatId=' + this.user.OpenId + '&DataType=' + 1 + '&PageIndex=' + 1 + '&PageSize=' + 10)
-      // axios.get(url + '/order')
-      .then(res => {
-        this.orderList = res.data.Data.OrderInfoList
-        this.orderIndex = ++res.data.Data.PageIndex
-        if(res.data.Data.DataCount > this.orderList.length){
-          this.isShowOrderMore = true
-        }else{
-          this.isShowOrderMore = false
-        }
-      })
-      .catch(err => {
-        console.log(err)
-      });
-    },
-    activated() {
-      this.left = true
+      this._initYouhui()
+      this._initOrder()
     },
     filters: {
       caculatePrice:function (goods) {
@@ -134,9 +103,38 @@
       }
     },
     methods: {
+      _initYouhui(){
+        axios.get('../api/AjaxAPI/GetMyCoupons?ThirdId=' + this.user.OpenId + '&DataType=' + 1 + '&PageIndex=' + 1 + '&PageSize=' + 10)
+        // axios.get(url + '/youhuiquan')
+        .then(res => {
+          this.youhuiquanList = res.data.Data.CouponsInfoList
+          this.youhuiIndex = ++res.data.Data.PageIndex
+          if(res.data.Data.DataCount > this.youhuiquanList.length){
+            this.isShowYouhuiMore = true
+          }else{
+            this.isShowYouhuiMore = false
+          }
+        })
+      },
+      _initOrder(){
+        axios.get('../api/AjaxAPI/GetOrderList?ThirdId=' + this.user.OpenId + '&DataType=' + 1 + '&PageIndex=' + 1 + '&PageSize=' + 10)
+        // axios.get(url + '/order')
+        .then(res => {
+          this.orderList = res.data.Data.OrderInfoList
+          this.orderIndex = ++res.data.Data.PageIndex
+          if(res.data.Data.DataCount > this.orderList.length){
+            this.isShowOrderMore = true
+          }else{
+            this.isShowOrderMore = false
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        });
+      },
       loadYouhui(){
         this.isShowYouhuiMore = false
-        axios.get('../api/AjaxAPI/GetMyCoupons?WechatId=' + this.user.OpenId + '&DataType=' + 0 + '&PageIndex=' + this.youhuiIndex + '&PageSize=' + 10)
+        axios.get('../api/AjaxAPI/GetMyCoupons?ThirdId=' + this.user.OpenId + '&DataType=' + 1 + '&PageIndex=' + this.youhuiIndex + '&PageSize=' + 10)
         // axios.get(url + '/youhuiquan')
         .then(res => {
           this.youhuiquanList = this.youhuiquanList.concat(res.data.Data.CouponsInfoList)
@@ -153,7 +151,7 @@
       },
       loadOrder(){
         this.isShowOrderMore = false
-        axios.get('../api/AjaxAPI/GetOrderList?WechatId=' + this.user.OpenId + '&DataType=' + 1 + '&PageIndex=' + this.orderIndex + '&PageSize=' + 10)
+        axios.get('../api/AjaxAPI/GetOrderList?ThirdId=' + this.user.OpenId + '&DataType=' + 1 + '&PageIndex=' + this.orderIndex + '&PageSize=' + 10)
         // axios.get(url + '/order')
         .then(res => {
           this.orderList = this.orderList.concat(res.data.Data.OrderInfoList)
@@ -172,36 +170,16 @@
         this.youhuiquanList = []
         this.youhuiIndex = 0
         this.left = true
-        axios.get('../api/AjaxAPI/GetMyCoupons?WechatId=' + this.user.OpenId + '&DataType=' + 0 + '&PageIndex=' + 1 + '&PageSize=' + 10)
-      // axios.get(url + '/youhuiquan')
-        .then(res => {
-          this.youhuiquanList = res.data.Data.CouponsInfoList
-          this.youhuiIndex = ++res.data.Data.PageIndex
-          if(res.data.Data.DataCount > this.youhuiquanList.length){
-            this.isShowYouhuiMore = true
-          }else{
-            this.isShowYouhuiMore = false
-          }
-        })
+        this._initYouhui()
       },
       order(){
         this.orderList = []
         this.orderIndex = 0
         this.left = false
-        axios.get('../api/AjaxAPI/GetOrderList?WechatId=' + this.user.OpenId + '&DataType=' + 1 + '&PageIndex=' + 1 + '&PageSize=' + 10)
-      // axios.get(url + '/order')
-        .then(res => {
-          this.orderList = res.data.Data.OrderInfoList
-          this.orderIndex = ++res.data.Data.PageIndex
-          if(res.data.Data.DataCount > this.orderList.length){
-            this.isShowOrderMore = true
-          }else{
-            this.isShowOrderMore = false
-          }
-        })
+        this._initOrder()
       },
       selectOrder(orderCode){
-        this.$store.state.orderCode = orderCode
+        localStorage.setItem("orderCode", orderCode);
         this.$router.push({path:'/orderDetail'})
       }
     },
@@ -227,23 +205,24 @@
   $yellow=#fdd953;
   $red=#e84e40;
   
-  // .slide-enter-active, .slide-leave-active
-  //   transition: all 0.3s
+  .slide-enter-active, .slide-leave-active
+    transition: all 0.3s
 
-  // .slide-enter, .slide-leave-to
-  //   transform: translate3d(100%, 0, 0)
+  .slide-enter, .slide-leave-to
+    transform: translate3d(100%, 0, 0)
 
   .account{
     // position:fixed;
-    // top:0
-    // left:0;
-    // right:0;
-    // bottom:0;
+    position:absolute;
+    top:0
+    left:0;
+    right:0;
+    bottom:0;
     width:100%;
     // height:100%;
     z-index:100;
-    overflow:scroll;
-    -webkit-overflow-scrolling : touch;
+    // overflow:scroll;
+    // -webkit-overflow-scrolling : touch;
     background:#f3f5f9;
     .account-contain{
       width:100%;
@@ -381,11 +360,14 @@
             }
           }
         }
-        .youhuiquan-more{
+        .youhuiquan-more-contain{
           width:100%;
-          text-align: center;
-          color:#444;
-          margin-bottom:48px;
+          height:70px;
+          .youhuiquan-more{
+            width:100%;
+            text-align: center;
+            color:#444;
+          }
         }
       }
       .order-list{
@@ -461,11 +443,14 @@
             }
           }
         }
-        .order-more{
+        .order-more-contain{
           width:100%;
-          text-align: center;
-          color:#444;
-          margin-bottom:48px;
+          height:70px;
+          .order-more{
+            width:100%;
+            text-align: center;
+            color:#444;
+          }
         }
       }
     }

@@ -12,22 +12,22 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/goodsShow'
+      redirect: '/goodsShow',
     },
     {
       path: '/goodsShow',
       name: 'goodsShow',
-      component: GoodsShow,
+      component: GoodsShow
     },
     {
       path: '/account',
       name: 'account',
-      component: Account,
+      component: Account
     },
     {
       path: '/coupon',
       name: 'coupon',
-      component: Coupon,
+      component: Coupon
     },
     {
       path: '/orderDetail',

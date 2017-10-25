@@ -4,7 +4,7 @@
       <div>
         <div class="detail-top">
           <div class="detail-shiji"><span class="detail-shiji-left">实际支付:</span><span class="detail-shiji-small">￥</span><span class="detail-shiji-price">{{orderDetail.TotalAmount}}</span></div>
-          <div class="detail-youhui"><span class="detail-youhui-left">活动优惠</span><span class="detail-youhui-price">-{{orderDetail.CouAmt}}</span></div>
+          <div class="detail-youhui" v-if="orderDetail.CouAmt"><span class="detail-youhui-left">活动优惠</span><span class="detail-youhui-price">-{{orderDetail.CouAmt}}</span></div>
         </div>
         <div class="detail-title">
           <svg class="icon" aria-hidden="true" style="width:10px;height:42px;vertical-align: middle;">
@@ -44,7 +44,7 @@
       }
     },
     activated() {
-      axios.get('../api/AjaxAPI/GetOrderDetail?OrderCode=' + this.$store.state.orderCode)
+      axios.get('../api/AjaxAPI/GetOrderDetail?OrderCode=' + localStorage.getItem("orderCode"))
       // axios.get(url + '/orderDetail')
       .then(res => {
         this.orderDetail = res.data.Data

@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script type="text/javascript">
   import BScroll from 'better-scroll'
 
   const DIRECTION_H = 'horizontal'

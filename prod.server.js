@@ -34,16 +34,173 @@ app.get('/goods', function (req, res) {
             "GoodsImg": [
               {
                 "SNo": 1,
-                "ImgUrl": "sample string 2"
-              },
-              {
-                "SNo": 1,
-                "ImgUrl": "sample string 2"
+                "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
               }
             ],
             "GoodsDiscPrice": 0.01,
             "GoodsPrice": 2.0,
+            "CurrQty": 0,
+            "MaxQty": 7,
+            "ShouldQty": 8
+          },
+          {
+            "SNo": 1,
+            "GoodsCode": "sample string 2",
+            "GoodsName": "sample string 2",
+            "GoodsImg": [],
+            "GoodsDiscPrice": 3.0,
+            "GoodsPrice": 4.0,
+            "CurrQty": -2,
+            "MaxQty": 7,
+            "ShouldQty": 8
+          }
+        ]
+      },
+      {
+        "Level": 2,
+        "GoodsInfoList": [
+          {
+            "SNo": 1,
+            "GoodsCode": "sample string 3",
+            "GoodsName": "sample string 3",
+            "GoodsImg": [
+              {
+                "SNo": 1,
+                "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
+              },
+              {
+                "SNo": 1,
+                "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
+              }
+            ],
+            "GoodsDiscPrice": 5.0,
+            "GoodsPrice": 6.0,
             "CurrQty": 6,
+            "MaxQty": 7,
+            "ShouldQty": 8
+          },
+          {
+            "SNo": 1,
+            "GoodsCode": "sample string 4",
+            "GoodsName": "sample string 4",
+            "GoodsImg": [
+              {
+                "SNo": 1,
+                "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
+              },
+              {
+                "SNo": 1,
+                "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
+              }
+            ],
+            "GoodsDiscPrice": 4.0,
+            "GoodsPrice": 5.0,
+            "CurrQty": 6,
+            "MaxQty": 7,
+            "ShouldQty": 8
+          },
+          {
+            "SNo": 1,
+            "GoodsCode": "sample string 5",
+            "GoodsName": "sample string 5",
+            "GoodsImg": [
+              {
+                "SNo": 1,
+                "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
+              },
+              {
+                "SNo": 1,
+                "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
+              }
+            ],
+            "GoodsDiscPrice": 4.0,
+            "GoodsPrice": 5.0,
+            "CurrQty": 6,
+            "MaxQty": 7,
+            "ShouldQty": 8
+          },
+          {
+            "SNo": 1,
+            "GoodsCode": "sample string 6",
+            "GoodsName": "sample string 6",
+            "GoodsImg": [
+              {
+                "SNo": 1,
+                "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
+              },
+              {
+                "SNo": 1,
+                "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
+              }
+            ],
+            "GoodsDiscPrice": 4.0,
+            "GoodsPrice": 5.0,
+            "CurrQty": 6,
+            "MaxQty": 7,
+            "ShouldQty": 8
+          },
+          {
+            "SNo": 1,
+            "GoodsCode": "sample string 7",
+            "GoodsName": "sample string 7",
+            "GoodsImg": [
+              {
+                "SNo": 1,
+                "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
+              },
+              {
+                "SNo": 1,
+                "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
+              }
+            ],
+            "GoodsDiscPrice": 4.0,
+            "GoodsPrice": 5.0,
+            "CurrQty": 6,
+            "MaxQty": 7,
+            "ShouldQty": 8
+          },
+          {
+            "SNo": 1,
+            "GoodsCode": "sample string 8",
+            "GoodsName": "sample string 8",
+            "GoodsImg": [
+              {
+                "SNo": 1,
+                "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
+              },
+              {
+                "SNo": 1,
+                "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
+              }
+            ],
+            "GoodsDiscPrice": 4.0,
+            "GoodsPrice": 5.0,
+            "CurrQty": 6,
+            "MaxQty": 7,
+            "ShouldQty": 8
+          }
+        ]
+      },
+      {
+        "Level": 1,
+        "GoodsInfoList": [
+          {
+            "SNo": 1,
+            "GoodsCode": "sample string 1",
+            "GoodsName": "sample string 1",
+            "GoodsImg": [
+              {
+                "SNo": 1,
+                "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
+              },
+              {
+                "SNo": 1,
+                "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
+              }
+            ],
+            "GoodsDiscPrice": 0.01,
+            "GoodsPrice": 2.0,
+            "CurrQty": 0,
             "MaxQty": 7,
             "ShouldQty": 8
           },
@@ -54,11 +211,11 @@ app.get('/goods', function (req, res) {
             "GoodsImg": [
               {
                 "SNo": 1,
-                "ImgUrl": "sample string 2"
+                "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
               },
               {
                 "SNo": 1,
-                "ImgUrl": "sample string 2"
+                "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
               }
             ],
             "GoodsDiscPrice": 3.0,
@@ -79,11 +236,11 @@ app.get('/goods', function (req, res) {
             "GoodsImg": [
               {
                 "SNo": 1,
-                "ImgUrl": "sample string 2"
+                "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
               },
               {
                 "SNo": 1,
-                "ImgUrl": "sample string 2"
+                "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
               }
             ],
             "GoodsDiscPrice": 5.0,
@@ -99,11 +256,11 @@ app.get('/goods', function (req, res) {
             "GoodsImg": [
               {
                 "SNo": 1,
-                "ImgUrl": "sample string 2"
+                "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
               },
               {
                 "SNo": 1,
-                "ImgUrl": "sample string 2"
+                "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
               }
             ],
             "GoodsDiscPrice": 4.0,
@@ -119,11 +276,11 @@ app.get('/goods', function (req, res) {
             "GoodsImg": [
               {
                 "SNo": 1,
-                "ImgUrl": "sample string 2"
+                "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
               },
               {
                 "SNo": 1,
-                "ImgUrl": "sample string 2"
+                "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
               }
             ],
             "GoodsDiscPrice": 4.0,
@@ -139,11 +296,11 @@ app.get('/goods', function (req, res) {
             "GoodsImg": [
               {
                 "SNo": 1,
-                "ImgUrl": "sample string 2"
+                "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
               },
               {
                 "SNo": 1,
-                "ImgUrl": "sample string 2"
+                "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
               }
             ],
             "GoodsDiscPrice": 4.0,
@@ -159,11 +316,11 @@ app.get('/goods', function (req, res) {
             "GoodsImg": [
               {
                 "SNo": 1,
-                "ImgUrl": "sample string 2"
+                "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
               },
               {
                 "SNo": 1,
-                "ImgUrl": "sample string 2"
+                "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
               }
             ],
             "GoodsDiscPrice": 4.0,
@@ -179,11 +336,11 @@ app.get('/goods', function (req, res) {
             "GoodsImg": [
               {
                 "SNo": 1,
-                "ImgUrl": "sample string 2"
+                "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
               },
               {
                 "SNo": 1,
-                "ImgUrl": "sample string 2"
+                "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
               }
             ],
             "GoodsDiscPrice": 4.0,
@@ -310,11 +467,11 @@ app.get('/order', function (req, res) {
 //             "GoodsImg": [
 //               {
 //                 "SNo": 1,
-//                 "ImgUrl": "sample string 2"
+//                 "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
 //               },
 //               {
 //                 "SNo": 1,
-//                 "ImgUrl": "sample string 2"
+//                 "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
 //               }
 //             ],
 //             "GoodsDiscPrice": 1.0,
@@ -326,11 +483,11 @@ app.get('/order', function (req, res) {
 //             "GoodsImg": [
 //               {
 //                 "SNo": 1,
-//                 "ImgUrl": "sample string 2"
+//                 "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
 //               },
 //               {
 //                 "SNo": 1,
-//                 "ImgUrl": "sample string 2"
+//                 "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
 //               }
 //             ],
 //             "GoodsDiscPrice": 2.0,
@@ -354,11 +511,11 @@ app.get('/order', function (req, res) {
 //             "GoodsImg": [
 //               {
 //                 "SNo": 1,
-//                 "ImgUrl": "sample string 2"
+//                 "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
 //               },
 //               {
 //                 "SNo": 1,
-//                 "ImgUrl": "sample string 2"
+//                 "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
 //               }
 //             ],
 //             "GoodsDiscPrice": 3.0,
@@ -370,11 +527,11 @@ app.get('/order', function (req, res) {
 //             "GoodsImg": [
 //               {
 //                 "SNo": 1,
-//                 "ImgUrl": "sample string 2"
+//                 "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
 //               },
 //               {
 //                 "SNo": 1,
-//                 "ImgUrl": "sample string 2"
+//                 "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
 //               }
 //             ],
 //             "GoodsDiscPrice": 4.0,
@@ -592,11 +749,11 @@ app.get('/orderDetail', function (req, res) {
         "GoodsImg": [
           {
             "SNo": 1,
-            "ImgUrl": "sample string 2"
+            "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
           },
           {
             "SNo": 1,
-            "ImgUrl": "sample string 2"
+            "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
           }
         ],
         "GoodsDiscPrice": 3.0,
@@ -608,11 +765,11 @@ app.get('/orderDetail', function (req, res) {
         "GoodsImg": [
           {
             "SNo": 1,
-            "ImgUrl": "sample string 2"
+            "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
           },
           {
             "SNo": 1,
-            "ImgUrl": "sample string 2"
+            "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
           }
         ],
         "GoodsDiscPrice": 3.0,
@@ -624,11 +781,11 @@ app.get('/orderDetail', function (req, res) {
         "GoodsImg": [
           {
             "SNo": 1,
-            "ImgUrl": "sample string 2"
+            "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
           },
           {
             "SNo": 1,
-            "ImgUrl": "sample string 2"
+            "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
           }
         ],
         "GoodsDiscPrice": 3.0,
@@ -639,11 +796,11 @@ app.get('/orderDetail', function (req, res) {
         "GoodsImg": [
           {
             "SNo": 1,
-            "ImgUrl": "sample string 2"
+            "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
           },
           {
             "SNo": 1,
-            "ImgUrl": "sample string 2"
+            "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
           }
         ],
         "GoodsDiscPrice": 3.0,
@@ -654,11 +811,11 @@ app.get('/orderDetail', function (req, res) {
         "GoodsImg": [
           {
             "SNo": 1,
-            "ImgUrl": "sample string 2"
+            "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
           },
           {
             "SNo": 1,
-            "ImgUrl": "sample string 2"
+            "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
           }
         ],
         "GoodsDiscPrice": 3.0,
@@ -669,11 +826,11 @@ app.get('/orderDetail', function (req, res) {
         "GoodsImg": [
           {
             "SNo": 1,
-            "ImgUrl": "sample string 2"
+            "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
           },
           {
             "SNo": 1,
-            "ImgUrl": "sample string 2"
+            "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
           }
         ],
         "GoodsDiscPrice": 3.0,
@@ -684,11 +841,11 @@ app.get('/orderDetail', function (req, res) {
         "GoodsImg": [
           {
             "SNo": 1,
-            "ImgUrl": "sample string 2"
+            "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
           },
           {
             "SNo": 1,
-            "ImgUrl": "sample string 2"
+            "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
           }
         ],
         "GoodsDiscPrice": 3.0,
@@ -699,11 +856,11 @@ app.get('/orderDetail', function (req, res) {
         "GoodsImg": [
           {
             "SNo": 1,
-            "ImgUrl": "sample string 2"
+            "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
           },
           {
             "SNo": 1,
-            "ImgUrl": "sample string 2"
+            "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
           }
         ],
         "GoodsDiscPrice": 3.0,
@@ -714,11 +871,11 @@ app.get('/orderDetail', function (req, res) {
         "GoodsImg": [
           {
             "SNo": 1,
-            "ImgUrl": "sample string 2"
+            "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
           },
           {
             "SNo": 1,
-            "ImgUrl": "sample string 2"
+            "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
           }
         ],
         "GoodsDiscPrice": 3.0,
@@ -729,11 +886,11 @@ app.get('/orderDetail', function (req, res) {
         "GoodsImg": [
           {
             "SNo": 1,
-            "ImgUrl": "sample string 2"
+            "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
           },
           {
             "SNo": 1,
-            "ImgUrl": "sample string 2"
+            "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
           }
         ],
         "GoodsDiscPrice": 3.0,
@@ -744,11 +901,11 @@ app.get('/orderDetail', function (req, res) {
         "GoodsImg": [
           {
             "SNo": 1,
-            "ImgUrl": "sample string 2"
+            "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
           },
           {
             "SNo": 1,
-            "ImgUrl": "sample string 2"
+            "ImgUrl":'http://39.108.140.237:802/GoodsImages/A0007_20171009171015_8812.jpg'
           }
         ],
         "GoodsDiscPrice": 3.0,
@@ -782,44 +939,44 @@ app.get('/user', function (req, res) {
 });
 
 
-apiRoutes.get('/getDiscList', function (req, res) {
-  var url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg'
-  axios.get(url, {
-    headers: {
-      referer: 'https://c.y.qq.com/',
-      host: 'c.y.qq.com'
-    },
-    params: req.query
-  }).then((response) => {
-    res.json(response.data)
-  }).catch((e) => {
-    console.log(e)
-  })
-})
+// apiRoutes.get('/getDiscList', function (req, res) {
+//   var url = 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg'
+//   axios.get(url, {
+//     headers: {
+//       referer: 'https://c.y.qq.com/',
+//       host: 'c.y.qq.com'
+//     },
+//     params: req.query
+//   }).then((response) => {
+//     res.json(response.data)
+//   }).catch((e) => {
+//     console.log(e)
+//   })
+// })
 
-apiRoutes.get('/lyric', function (req, res) {
-  var url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg'
+// apiRoutes.get('/lyric', function (req, res) {
+//   var url = 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg'
 
-  axios.get(url, {
-    headers: {
-      referer: 'https://c.y.qq.com/',
-      host: 'c.y.qq.com'
-    },
-    params: req.query
-  }).then((response) => {
-    var ret = response.data
-    if (typeof ret === 'string') {
-      var reg = /^\w+\(({[^\(\)]+})\)$/
-      var matches = response.data.match(reg)
-      if (matches) {
-        ret = JSON.parse(matches[1])
-      }
-    }
-    res.json(ret)
-  }).catch((e) => {
-    console.log(e)
-  })
-})
+//   axios.get(url, {
+//     headers: {
+//       referer: 'https://c.y.qq.com/',
+//       host: 'c.y.qq.com'
+//     },
+//     params: req.query
+//   }).then((response) => {
+//     var ret = response.data
+//     if (typeof ret === 'string') {
+//       var reg = /^\w+\(({[^\(\)]+})\)$/
+//       var matches = response.data.match(reg)
+//       if (matches) {
+//         ret = JSON.parse(matches[1])
+//       }
+//     }
+//     res.json(ret)
+//   }).catch((e) => {
+//     console.log(e)
+//   })
+// })
 
 app.use('/api', apiRoutes)
 
