@@ -1,8 +1,8 @@
 {
-  "name": "vue-music",
+  "name": "vue-blg",
   "version": "1.0.0",
-  "description": "音乐播放器",
-  "author": "ling.li <630935451@qq.com>",
+  "description": "便利格",
+  "author": "linyu <526645879@qq.com>",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
@@ -27,7 +27,8 @@
     "vue-lazyload": "1.0.3",
     "vue-router": "^2.5.3",
     "vue-wechat-title": "^2.0.4",
-    "vuex": "^2.3.1"
+    "vuex": "^2.3.1",
+    "weixin-js-sdk": "^1.2.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",

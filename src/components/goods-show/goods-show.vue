@@ -27,6 +27,7 @@
             <div class="goods-list-contain-col clear">
               <div class="list-goods" v-for="goods in goodsList.GoodsInfoList">
                 <div class="goods-pic" :style="{backgroundImage: goods.GoodsImg.length>0?'url('+goods.GoodsImg[0].ImgUrl+')':'url('+''+')'}"></div>
+                <!-- <div class="goods-pic"></div> -->
                 <div class="goods-name">{{goods.GoodsName}}</div>
                 <div class="clear" v-if="goods.CurrQty>0"><div class="new-prise" :class="{redcolor: goods.GoodsDiscPrice!=goods.GoodsPrice}"><span class="new-prise-left">￥</span><span class="new-prise-right">{{goods.GoodsDiscPrice}}</span></div><s class="old-prise" v-if="goods.GoodsDiscPrice!=goods.GoodsPrice">￥{{goods.GoodsPrice}}</s><div class="plus-btn" @click="plusbtn(goods)"></div></div>
                 <div class="clear quehuo" v-if="goods.CurrQty<=0">缺货</div>
@@ -116,6 +117,7 @@
   import {url} from 'api/config'
   import {accAdd,accSub,accMul,accDiv} from 'api/calculate'
   import BScroll from 'better-scroll'
+  import wx from 'weixin-js-sdk'
 
   export default {
     data() {
@@ -158,6 +160,7 @@
       }
     },
     created(){
+      let that = this
       this.url = location.search; //获取url中"?"符后的字串 
       var theRequest = new Object(); 
       if (this.url.indexOf("?") != -1) { 
@@ -187,13 +190,35 @@
       axios.get('../api/AjaxAPI/GetSelectCoupons?ThirdId=' + this.user.OpenId + '&ShelfCode=' + this.$store.state.shelfCode + '&DataType=' + 1 + '&PageIndex=' + 1 + '&PageSize=' + 10)
       // axios.get(url + '/youhuiquanselect')
       .then(res => {
-        if(res.data.Data.CouponsInfoList != null){
+        if(res.data.Data.CouponsInfoList != null && res.data.Data.CouponsInfoList.length>0){
           this.isShowYouhui = true
         }
       })
       .catch(err => {
         console.log(err)
       });
+
+      if(localStorage.getItem("hasreload") == null){
+        window.location.reload();
+        window.localStorage.setItem("hasreload",1)
+      }
+
+      wx.config({
+          debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+          appId: that.$store.state.user.AppId, // 必填，企业号的唯一标识，此处填写企业号corpid
+          timestamp: that.$store.state.user.Timestamp, // 必填，生成签名的时间戳
+          nonceStr: that.$store.state.user.NonceStr, // 必填，生成签名的随机串
+          signature: that.$store.state.user.Signature,// 必填，签名，见附录1
+          jsApiList: ['scanQRCode'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+      });
+      wx.ready(function () {
+          // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+      });
+      wx.error(function (res) {
+          // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+          alert('微信初始化失败' + res)
+      });
+      //扫描二维码并返回结果
     },
     activated() {
       this.youhuiquan = this.$store.state.youhui_select
@@ -279,8 +304,18 @@
       }
     },
     methods:{
+      ScanQRCode(){
+        wx.scanQRCode({
+            needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+            scanType: ["qrCode"], // 可以指定扫二维码还是一维码，默认二者都有, "barCode"
+            success: function (res) {
+                var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+                location.href = result;
+            }
+        });
+      },
       saiMiao(){
-        this.$store.state.scanQRCode()
+        this.ScanQRCode()
       },
       clearList(){
         this.purchaseList = []
@@ -483,8 +518,44 @@
         }
       },
       pay() {
+        let that = this
+        let jsApiParameters = {};
+        let onBridgeReady = function() {
+          WeixinJSBridge.invoke(
+              'getBrandWCPayRequest',
+              jsApiParameters,
+              function (res) {
+                  // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+                  if (res.err_msg == undefined) {
+                      that.showMainMask("支付失败:" + res.errMsg)
+                      return;
+                  }
+                  if (res.err_msg.indexOf("ok") != -1) {
+                      that.payReload()
+                  } else if (res.err_msg.indexOf("cancel") != -1) {
+                      that.showMainMask("支付失败：支付过程中用户取消")
+                  } else {
+                      //location.href = '/MsgPage/Fail';
+                      that.showMainMask("支付失败")
+                  }
+              }
+          );
+        }
+
+        let callpay = function(){
+            if (typeof WeixinJSBridge == "undefined") {
+                if (document.addEventListener) {
+                    document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+                } else if (document.attachEvent) {
+                    document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+                    document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+                }
+            } else {
+                onBridgeReady();
+            }            
+        }
+
         if(this.isShowMask){
-          var that = this
           if(that.isCanPay){
             that.isCanPay = false
             this.isYouhui()
@@ -524,22 +595,32 @@
                     that.isCanPay = true
                   },
                   success: function (json) {
+                      // alert('进入成功')
                       that.isCanPay = true
                       that.orderCode = json.Data != null?json.Data.OrderCode:''
                       if (json.Status != 200) {
+                          // alert('status=' + json.Status)
                           that.showMainMask(json.Msg)
                       } else {
+                          // alert('orderType=' + that.orderType)
                           if (that.orderType == 1) {
+                              // alert('进入orderType==1')
+                              // alert('WeChatPublic=' + json.Data.WechatPublicOrderInfo)
                               var WeChatPublic = json.Data.WechatPublicOrderInfo;
                               if (WeChatPublic != null) {
-                                  that.onBridgeReady(WeChatPublic.AppId,
-                                      WeChatPublic.Noncestr,
-                                      WeChatPublic.Timestamp,
-                                      WeChatPublic.Package,
-                                      WeChatPublic.SignType,
-                                      WeChatPublic.PaySign);
+                                  // alert('进入WeChatPublic!=null')
+                                  jsApiParameters = {
+                                    "appId": WeChatPublic.AppId,     //公众号名称，由商户传入
+                                    "timeStamp": WeChatPublic.Timestamp,         //时间戳，自1970年以来的秒数
+                                    "nonceStr": WeChatPublic.Noncestr, //随机串
+                                    "package": WeChatPublic.Package,
+                                    "signType": WeChatPublic.SignType,         //微信签名方式：
+                                    "paySign": WeChatPublic.PaySign //微信签名
+                                  }
+                                  callpay();
                               }
                           } else if (that.orderType == 0) {
+                            // alert('进入orderType==0')
                             if(json.Data.IsCompletePay){
                               that.payReload()
                             }
@@ -594,16 +675,15 @@
         .then(res => {
           this.goodsData = res.data.Data
           this.$nextTick(() => {
-            // var jroll = new JRoll(this.$refs.bigWrapper, {});
             var jroll = new BScroll(this.$refs.bigWrapper, {});
           })
           axios.get('../api/AjaxAPI/GetSelectCoupons?ThirdId=' + this.user.OpenId + '&ShelfCode=' + this.$store.state.shelfCode + '&DataType=' + 1 + '&PageIndex=' + 1 + '&PageSize=' + 10)
           // axios.get(url + '/youhuiquanselect')
           .then(res => {
-            if(res.data.Data.CouponsInfoList != null){
+            if(res.data.Data.CouponsInfoList != null && res.data.Data.CouponsInfoList.length>0){
               this.isShowYouhui = true
-              location.href = "/MsgPage/PaySuccess?OrderCode=" + this.orderCode;
             }
+            location.href = "/MsgPage/PaySuccess?OrderCode=" + this.orderCode;
           })
           .catch(err => {
             console.log(err)
@@ -613,34 +693,6 @@
           console.log(err)
         });
       },
-      onBridgeReady(appid, nonceStr, timeStamp, pack, signType, paySign) {
-        var that = this
-        WeixinJSBridge.invoke(
-            'getBrandWCPayRequest', {
-                "appId": appid,     //公众号名称，由商户传入
-                "timeStamp": timeStamp,         //时间戳，自1970年以来的秒数
-                "nonceStr": nonceStr, //随机串
-                "package": pack,
-                "signType": signType,         //微信签名方式：
-                "paySign": paySign //微信签名
-            },
-            function (res) {
-                // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
-                if (res.err_msg == undefined) {
-                    that.showMainMask("支付失败:" + res.errMsg)
-                    return;
-                }
-                if (res.err_msg.indexOf("ok") != -1) {
-                    that.payReload()
-                } else if (res.err_msg.indexOf("cancel") != -1) {
-                    that.showMainMask("支付失败：支付过程中用户取消")
-                } else {
-                    //location.href = '/MsgPage/Fail';
-                    that.showMainMask("支付失败")
-                }
-            }
-        );
-      }
     },
     computed: {
       user () {
@@ -821,6 +873,7 @@
                 background-size:cover;
                 background-position:center;
                 background-repeat:no-repeat;
+                // background-image:url('../../common/image/shudabing01.png')
               }
               .goods-name{
                 margin:0 auto;

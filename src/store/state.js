@@ -20,7 +20,7 @@ const state = {
   shelfCode:'',
   isSelect:false,
   user:window.page,
-  scanQRCode:window.ScanQRCode
+  // scanQRCode:window.ScanQRCode
   // viewDirection:''
 }
 
