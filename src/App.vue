@@ -15,24 +15,7 @@
   export default {
     components: {
       MainMask
-    },
-    // computed: {
-
-    //   direction () {
-    //     const viewDir = this.$store.state.viewDirection
-    //     let tranName = ''
-
-    //     if (viewDir === 'left') {
-    //       tranName = 'view-out'
-    //     } else if (viewDir === 'right') {
-    //       tranName = 'view-in'
-    //     } else {
-    //       tranName = 'fade'
-    //     }
-
-    //     return tranName
-    //   },
-    // }
+    }
   }
 </script>
 

@@ -29,7 +29,7 @@
                 <div class="goods-pic" :style="{backgroundImage: goods.GoodsImg.length>0?'url('+goods.GoodsImg[0].ImgUrl+')':'url('+''+')'}"></div>
                 <!-- <div class="goods-pic"></div> -->
                 <div class="goods-name">{{goods.GoodsName}}</div>
-                <div class="clear" v-if="goods.CurrQty>0"><div class="new-prise" :class="{redcolor: goods.GoodsDiscPrice!=goods.GoodsPrice}"><span class="new-prise-left">￥</span><span class="new-prise-right">{{goods.GoodsDiscPrice}}</span></div><s class="old-prise" v-if="goods.GoodsDiscPrice!=goods.GoodsPrice">￥{{goods.GoodsPrice}}</s><div class="plus-btn" @click="plusbtn(goods)"></div></div>
+                <div class="goods-text-bottom-contain clear" v-if="goods.CurrQty>0"><div class="new-prise" :class="{redcolor: goods.GoodsDiscPrice!=goods.GoodsPrice}"><span class="new-prise-left">￥</span><span class="new-prise-right">{{goods.GoodsDiscPrice}}</span></div><s class="old-prise" v-if="goods.GoodsDiscPrice!=goods.GoodsPrice">￥{{goods.GoodsPrice}}</s><div class="plus-btn-contain"><div class="plus-btn" @click="plusbtn(goods)"></div></div></div>
                 <div class="clear quehuo" v-if="goods.CurrQty<=0">缺货</div>
               </div>
             </div>
@@ -886,43 +886,51 @@
                 white-space: nowrap;
                 text-overflow:ellipsis;
               }
-              .quehuo{
-                text-align:center;
-                font-size:14px;
-                color:#666;
-                height:20px;
-                line-height:20px;
-              }
-              .new-prise{
-                float:left;
-                color:#444;
-                .new-prise-left{
+              .goods-text-bottom-contain{
+                position:relative;
+                .quehuo{
+                  text-align:center;
+                  font-size:14px;
+                  color:#666;
+                  height:20px;
+                  line-height:20px;
+                }
+                .new-prise{
+                  float:left;
+                  color:#444;
+                  .new-prise-left{
+                    font-size: 12px;
+                    transform:scale(.7);
+                  }
+                  .new-prise-right{
+                    font-size:14px;
+                  }
+                }
+                .redcolor{
+                  color:$red;
+                }
+                .old-prise{
+                  float:left;
+                  color: #666;
+                  margin-top: 4px;
                   font-size: 12px;
                   transform:scale(.7);
+                  transform-origin:0 40%;
                 }
-                .new-prise-right{
-                  font-size:14px;
+                .plus-btn-contain{
+                  position:absolute
+                  right:0;top:0
+                  width:20px;
+                  height:20px;
+                  .plus-btn{
+                    extend-click()
+                    width:20px;
+                    height:20px;
+                    background:center no-repeat;
+                    bg-image('../../common/image/increase');
+                    background-size:20px;
+                  }
                 }
-              }
-              .redcolor{
-                color:$red;
-              }
-              .old-prise{
-                float:left;
-                color: #666;
-                margin-top: 4px;
-                font-size: 12px;
-                transform:scale(.7);
-                transform-origin:0 40%;
-              }
-              .plus-btn{
-                extend-click()
-                float:right;
-                width:20px;
-                height:20px;
-                background:center no-repeat;
-                bg-image('../../common/image/increase');
-                background-size:20px;
               }
             }
             &:last-child{
@@ -1077,6 +1085,12 @@
               float:left;
               font-size: 14px;
               color:#000;
+              width:50%;
+              height: 20px;
+              line-height: 20px;
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
             }
             .mask-calculate{
               float:right;
