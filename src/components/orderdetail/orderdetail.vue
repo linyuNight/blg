@@ -33,18 +33,17 @@
 
 <script type="text/javascript">
   import axios from 'axios'
-  import {url} from 'api/config'
+  import {url,urlapi} from 'api/config'
   import {accAdd,accSub,accMul,accDiv} from 'api/calculate'
 
   export default {
     data() {
       return {
         orderDetail: [],
-        detailScroll: {}
       }
     },
     activated() {
-      axios.get('../api/AjaxAPI/GetOrderDetail?OrderCode=' + localStorage.getItem("orderCode"))
+      axios.get(urlapi + 'GetOrderDetail?OrderCode=' + localStorage.getItem("orderCode"))
       // axios.get(url + '/orderDetail')
       .then(res => {
         this.orderDetail = res.data.Data

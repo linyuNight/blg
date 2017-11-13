@@ -25,7 +25,7 @@
 
 <script type="text/javascript">
   import axios from 'axios'
-  import {url} from 'api/config'
+  import {url,urlapi} from 'api/config'
   import {accAdd,accSub,accMul,accDiv} from 'api/calculate'
   // import BScroll from 'better-scroll'
 
@@ -35,13 +35,12 @@
         youhuiquanList: [],
         youhuiIndex: 0,
         isShowYouhuiMore: false,
-        youhuiScroll: {}
       }
     },
     activated() {
       this.youhuiquanList = []
       this.youhuiIndex = 0
-      axios.get('../api/AjaxAPI/GetSelectCoupons?ThirdId=' + this.user.OpenId + '&ShelfCode=' + this.$store.state.shelfCode + '&DataType=' + 1 + '&PageIndex=' + 1 + '&PageSize=' + 10)
+      axios.get(urlapi + 'GetSelectCoupons?ThirdId=' + this.user.OpenId + '&ShelfCode=' + this.$store.state.shelfCode + '&DataType=' + 1 + '&PageIndex=' + 1 + '&PageSize=' + 10)
       // axios.get(url + '/youhuiquanselect')
       .then(res => {
         this.youhuiquanList = res.data.Data.CouponsInfoList
@@ -55,9 +54,8 @@
     },
     methods: {
       loadYouhui(){
-
         this.isShowYouhuiMore = false
-        axios.get('../api/AjaxAPI/GetSelectCoupons?ThirdId=' + this.user.OpenId + '&ShelfCode=' + this.$store.state.shelfCode + '&DataType=' + 1 + '&PageIndex=' + this.youhuiIndex + '&PageSize=' + 10)
+        axios.get(urlapi + 'GetSelectCoupons?ThirdId=' + this.user.OpenId + '&ShelfCode=' + this.$store.state.shelfCode + '&DataType=' + 1 + '&PageIndex=' + this.youhuiIndex + '&PageSize=' + 10)
         // axios.get(url + '/youhuiquanselect')
         .then(res => {
           this.youhuiquanList = this.youhuiquanList.concat(res.data.Data.CouponsInfoList)

@@ -66,7 +66,7 @@
 
 <script type="text/javascript">
   import axios from 'axios'
-  import {url} from 'api/config'
+  import {url,urlapi} from 'api/config'
   import {accAdd,accSub,accMul,accDiv} from 'api/calculate'
 
   export default {
@@ -79,7 +79,6 @@
         orderIndex: 0,
         isShowYouhuiMore: false,
         isShowOrderMore: false,
-        accountScroll: {}
       }
     },
     created(){
@@ -104,7 +103,7 @@
     },
     methods: {
       _initYouhui(){
-        axios.get('../api/AjaxAPI/GetMyCoupons?ThirdId=' + this.user.OpenId + '&DataType=' + 1 + '&PageIndex=' + 1 + '&PageSize=' + 10)
+        axios.get(urlapi + 'GetMyCoupons?ThirdId=' + this.user.OpenId + '&DataType=' + 1 + '&PageIndex=' + 1 + '&PageSize=' + 10)
         // axios.get(url + '/youhuiquan')
         .then(res => {
           this.youhuiquanList = res.data.Data.CouponsInfoList
@@ -117,7 +116,7 @@
         })
       },
       _initOrder(){
-        axios.get('../api/AjaxAPI/GetOrderList?ThirdId=' + this.user.OpenId + '&DataType=' + 1 + '&PageIndex=' + 1 + '&PageSize=' + 10)
+        axios.get(urlapi + 'GetOrderList?ThirdId=' + this.user.OpenId + '&DataType=' + 1 + '&PageIndex=' + 1 + '&PageSize=' + 10)
         // axios.get(url + '/order')
         .then(res => {
           this.orderList = res.data.Data.OrderInfoList
@@ -134,7 +133,7 @@
       },
       loadYouhui(){
         this.isShowYouhuiMore = false
-        axios.get('../api/AjaxAPI/GetMyCoupons?ThirdId=' + this.user.OpenId + '&DataType=' + 1 + '&PageIndex=' + this.youhuiIndex + '&PageSize=' + 10)
+        axios.get(urlapi + 'GetMyCoupons?ThirdId=' + this.user.OpenId + '&DataType=' + 1 + '&PageIndex=' + this.youhuiIndex + '&PageSize=' + 10)
         // axios.get(url + '/youhuiquan')
         .then(res => {
           this.youhuiquanList = this.youhuiquanList.concat(res.data.Data.CouponsInfoList)
@@ -151,7 +150,7 @@
       },
       loadOrder(){
         this.isShowOrderMore = false
-        axios.get('../api/AjaxAPI/GetOrderList?ThirdId=' + this.user.OpenId + '&DataType=' + 1 + '&PageIndex=' + this.orderIndex + '&PageSize=' + 10)
+        axios.get(urlapi + 'GetOrderList?ThirdId=' + this.user.OpenId + '&DataType=' + 1 + '&PageIndex=' + this.orderIndex + '&PageSize=' + 10)
         // axios.get(url + '/order')
         .then(res => {
           this.orderList = this.orderList.concat(res.data.Data.OrderInfoList)

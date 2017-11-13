@@ -95,7 +95,7 @@ app.get('/goods', function (req, res) {
             ],
             "GoodsDiscPrice": 4.0,
             "GoodsPrice": 5.0,
-            "CurrQty": 6,
+            "CurrQty": 0,
             "MaxQty": 7,
             "ShouldQty": 8
           },
@@ -934,6 +934,51 @@ app.get('/user', function (req, res) {
     "NickName": "sample string 2",
     "HeadImgUrl": "sample string 3",
     "Sex": "sample string 4"
+  }
+   res.end(JSON.stringify(youhuiquan));
+});
+
+app.get('/salsinflist', function (req, res) {
+  res.header("Access-Control-Allow-Origin", "*");  
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");  
+  res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");  
+  res.header("X-Powered-By",' 3.2.1')  
+  res.header("Content-Type", "application/json;charset=utf-8");  
+  var youhuiquan = {
+    "Status": 200,
+    "Msg": "sample string 1",
+    "Data": {
+      "SalesCompanyList": [
+        {
+          "CompanyName": "sample string 1",
+          "ContactName": "sample string 2",
+          "Telphone": "sample string 3",
+          "Province": "sample string 4",
+          "City": "sample string 5",
+          "Area": "sample string 6",
+          "Address": "sample string 7",
+          "QtyA": 8,
+          "QtyB": 9,
+          "State": 10
+        },
+        {
+          "CompanyName": "sample string 1",
+          "ContactName": "sample string 2",
+          "Telphone": "sample string 3",
+          "Province": "sample string 4",
+          "City": "sample string 5",
+          "Area": "sample string 6",
+          "Address": "sample string 7",
+          "QtyA": 8,
+          "QtyB": 9,
+          "State": 10
+        }
+      ],
+      "PageIndex": 1,
+      "PageSize": 2,
+      "PageCount": 3,
+      "DataCount": 4
+    }
   }
    res.end(JSON.stringify(youhuiquan));
 });

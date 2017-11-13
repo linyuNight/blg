@@ -1,10 +1,10 @@
 <template>
   <div class="goods-show" ref="recommend">
     <div class="goods-show-title">
-      <div class="saoyisao" @click="saiMiao">
+      <div class="saoyisao" @click="saoMiao">
         <div class="sao-text">切换柜台</div>
       </div>
-      <svg class="icon" aria-hidden="true" style="height:18px;margin-top:11px;width:100%;">
+      <svg @click="payReload" class="icon" aria-hidden="true" style="height:18px;margin-top:11px;width:100%;">
         <use xlink:href="#icon-logo"></use>
       </svg>
       <router-link tag="div" class="account-pic" to="/account">
@@ -29,7 +29,7 @@
                 <div class="goods-pic" :style="{backgroundImage: goods.GoodsImg.length>0?'url('+goods.GoodsImg[0].ImgUrl+')':'url('+''+')'}"></div>
                 <!-- <div class="goods-pic"></div> -->
                 <div class="goods-name">{{goods.GoodsName}}</div>
-                <div class="goods-text-bottom-contain clear" v-if="goods.CurrQty>0"><div class="new-prise" :class="{redcolor: goods.GoodsDiscPrice!=goods.GoodsPrice}"><span class="new-prise-left">￥</span><span class="new-prise-right">{{goods.GoodsDiscPrice}}</span></div><s class="old-prise" v-if="goods.GoodsDiscPrice!=goods.GoodsPrice">￥{{goods.GoodsPrice}}</s><div class="plus-btn-contain"><div class="plus-btn" @click="plusbtn(goods)"></div></div></div>
+                <div class="goods-text-bottom-contain clear" v-if="goods.CurrQty>0"><div class="new-prise" :class="{redcolor: goods.GoodsDiscPrice!=goods.GoodsPrice}"><span class="new-prise-left">￥</span><span class="new-prise-right">{{goods.GoodsDiscPrice}}</span></div><s class="old-prise" v-if="goods.GoodsDiscPrice!=goods.GoodsPrice">￥{{goods.GoodsPrice}}</s><div class="plus-btn-contain"><div class="plus-btn" @click="plusbtn(goods)"><div class="plus-extend-click"></div></div></div></div>
                 <div class="clear quehuo" v-if="goods.CurrQty<=0">缺货</div>
               </div>
             </div>
@@ -114,7 +114,7 @@
   import axios from 'axios'
   import $ from 'jquery'
   import qs from 'qs'
-  import {url} from 'api/config'
+  import {url,urlapi} from 'api/config'
   import {accAdd,accSub,accMul,accDiv} from 'api/calculate'
   import BScroll from 'better-scroll'
   import wx from 'weixin-js-sdk'
@@ -142,7 +142,6 @@
         payYouhuiquan: {},
         url: '',
         theRequest: {},
-        goosScroll: {},
         balls: [{
           show: false
         }, {
@@ -172,22 +171,29 @@
       }
       this.theRequest = theRequest
       this.$store.state.shelfCode = theRequest.ShelfCode
-      axios.get('../api/AjaxAPI/GetGoodsInfo' + this.url)
+      axios.get(urlapi + 'GetGoodsInfo' + this.url)
       // axios.get(url + '/goods')
       .then(res => {
-        this.goodsData = res.data.Data
-        this.$nextTick(() => {
-          var jroll = new BScroll(this.$refs.bigWrapper, {
-            click:true,
-            deceleration:.002,
-            momentumLimitDistance:2,
-          });
-        })
+        if(res.data.Status == 601){
+          this.$store.state.isShowMask = true
+          this.$store.state.maskContent = '货柜暂时无法使用'
+        }else if(res.data.Status == 200){
+          this.goodsData = res.data.Data
+          this.$nextTick(() => {
+            var jroll = new BScroll(this.$refs.bigWrapper, {
+              click:true,
+              deceleration:.002,
+              momentumLimitDistance:2,
+            });
+          })
+        }else{
+          this.showMainMask(res.data.Msg)
+        }
       })
       .catch(err => {
         console.log(err)
       });
-      axios.get('../api/AjaxAPI/GetSelectCoupons?ThirdId=' + this.user.OpenId + '&ShelfCode=' + this.$store.state.shelfCode + '&DataType=' + 1 + '&PageIndex=' + 1 + '&PageSize=' + 10)
+      axios.get(urlapi + 'GetSelectCoupons?ThirdId=' + this.user.OpenId + '&ShelfCode=' + this.$store.state.shelfCode + '&DataType=' + 1 + '&PageIndex=' + 1 + '&PageSize=' + 10)
       // axios.get(url + '/youhuiquanselect')
       .then(res => {
         if(res.data.Data.CouponsInfoList != null && res.data.Data.CouponsInfoList.length>0){
@@ -314,7 +320,7 @@
             }
         });
       },
-      saiMiao(){
+      saoMiao(){
         this.ScanQRCode()
       },
       clearList(){
@@ -331,7 +337,7 @@
           ThirdId:this.$store.state.user.OpenId,
           Text:this.submitMessage
         }
-        axios.post('../api/AjaxAPI/SubmitUserWantEat',qs.stringify(data))
+        axios.post(urlapi + 'SubmitUserWantEat',qs.stringify(data))
         .then(res => {
           this.showMainMask(res.data.Msg)
         })
@@ -410,8 +416,7 @@
         }
       },
       plusbtn(goods){
-        this.drop(window.event)
-        this.add(goods)
+        this.add(goods)        
       },
       maskPlusbtn(goods){
         this.add(goods)
@@ -420,17 +425,24 @@
         if(this.purchaseList.length==0){
           goods.number = 1;
           this.purchaseList.push(goods)
+          this.drop(window.event)
         }else{
           let hasGoods = false
           for(let i=0;i<this.purchaseList.length;i++){
             if(this.purchaseList[i].GoodsCode == goods.GoodsCode){
-              this.purchaseList[i].number++
+              if(this.purchaseList[i].number >= goods.CurrQty){
+                this.showMainMask('商品数量不足')
+              }else{
+                this.purchaseList[i].number++
+                this.drop(window.event)
+              }
               hasGoods = true
             }
           }
           if(!hasGoods){
             goods.number = 1
             this.purchaseList.push(goods)
+            this.drop(window.event)
           }
         }
         this.changePurchaseNum()
@@ -650,13 +662,23 @@
         }
       },
       payReload() {
+        for(let i=0;i<this.myOrder.length;i++){
+          for(let j=0;j<this.goodsData.GoodsList.length;j++){
+            for(let k=0;k<this.goodsData.GoodsList[j].GoodsInfoList.length;k++){
+              if(this.myOrder[i].GoodsCode == this.goodsData.GoodsList[j].GoodsInfoList[k].GoodsCode){
+                this.goodsData.GoodsList[j].GoodsInfoList[k].CurrQty -= this.myOrder[i].Qty
+              }
+            }
+          }
+        }
+
         this.isShowMask= false
         this.isShowWant= false
         this.isShowYouhui= false
         this.isShowYouhuiDetail= false
         this.isDuang= false
         this.notePrice= 0
-        this.goodsData= []
+        // this.goodsData= []
         this.purchaseList= []
         this.myOrder= []
         this.submitMessage= ''
@@ -669,25 +691,27 @@
         this.payYouhuiquan= {}
         this.isCanPay= true
         this.$store.state.youhui_select = ''
-        this.$store.state.isSelect = false,
-        axios.get('../api/AjaxAPI/GetGoodsInfo' + this.url)
-        // axios.get(url + '/goods')
-        .then(res => {
-          this.goodsData = res.data.Data
-          this.$nextTick(() => {
-            var jroll = new BScroll(this.$refs.bigWrapper, {});
-          })
-          axios.get('../api/AjaxAPI/GetSelectCoupons?ThirdId=' + this.user.OpenId + '&ShelfCode=' + this.$store.state.shelfCode + '&DataType=' + 1 + '&PageIndex=' + 1 + '&PageSize=' + 10)
+        this.$store.state.isSelect = false
+        // axios.get(urlapi + 'GetGoodsInfo' + this.url)
+        // // axios.get(url + '/goods')
+        // .then(res => {
+        //   this.goodsData = res.data.Data
+        //   this.$nextTick(() => {
+        //     var jroll = new BScroll(this.$refs.bigWrapper, {});
+        //   })
+          
+        // })
+        // .catch(err => {
+        //   console.log(err)
+        // });
+        
+        axios.get(urlapi + 'GetSelectCoupons?ThirdId=' + this.user.OpenId + '&ShelfCode=' + this.$store.state.shelfCode + '&DataType=' + 1 + '&PageIndex=' + 1 + '&PageSize=' + 10)
           // axios.get(url + '/youhuiquanselect')
-          .then(res => {
-            if(res.data.Data.CouponsInfoList != null && res.data.Data.CouponsInfoList.length>0){
-              this.isShowYouhui = true
-            }
-            location.href = "/MsgPage/PaySuccess?OrderCode=" + this.orderCode;
-          })
-          .catch(err => {
-            console.log(err)
-          });
+        .then(res => {
+          if(res.data.Data.CouponsInfoList != null && res.data.Data.CouponsInfoList.length>0){
+            this.isShowYouhui = true
+          }
+          location.href = "/MsgPage/PaySuccess?OrderCode=" + this.orderCode;
         })
         .catch(err => {
           console.log(err)
@@ -886,15 +910,15 @@
                 white-space: nowrap;
                 text-overflow:ellipsis;
               }
+              .quehuo{
+                text-align:center;
+                font-size:14px;
+                color:#666;
+                height:22px;
+                line-height:22px;
+              }
               .goods-text-bottom-contain{
                 position:relative;
-                .quehuo{
-                  text-align:center;
-                  font-size:14px;
-                  color:#666;
-                  height:20px;
-                  line-height:20px;
-                }
                 .new-prise{
                   float:left;
                   color:#444;
@@ -923,6 +947,13 @@
                   width:20px;
                   height:20px;
                   .plus-btn{
+                    .plus-extend-click{
+                      position:absolute;
+                      top:-163px;
+                      right:0;
+                      width:100px;
+                      height:133px;
+                    }
                     extend-click()
                     width:20px;
                     height:20px;
