@@ -34,7 +34,7 @@
 <script type="text/javascript">
   import axios from 'axios'
   import {url,urlapi} from 'api/config'
-  import {accAdd,accSub,accMul,accDiv} from 'api/calculate'
+  import {accAdd,accSub,accMul,accDiv} from 'huaji-calculate'
 
   export default {
     data() {

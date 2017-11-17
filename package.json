@@ -18,6 +18,7 @@
     "create-keyframe-animation": "^0.1.0",
     "fastclick": "^1.0.6",
     "good-storage": "^1.0.1",
+    "huaji-calculate": "^1.0.0",
     "jquery": "^3.2.1",
     "js-base64": "^2.1.9",
     "jsonp": "0.2.1",
