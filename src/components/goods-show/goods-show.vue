@@ -4,7 +4,7 @@
       <div class="saoyisao" @click="saoMiao">
         <div class="sao-text">切换柜台</div>
       </div>
-      <svg @click="payReload" class="icon" aria-hidden="true" style="height:18px;margin-top:11px;width:100%;">
+      <svg class="icon" aria-hidden="true" style="height:18px;margin-top:11px;width:100%;">
         <use xlink:href="#icon-logo"></use>
       </svg>
       <router-link tag="div" class="account-pic" to="/account">

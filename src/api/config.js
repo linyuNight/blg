@@ -1,2 +1,2 @@
-export const url = 'http://20.172.33.127:9000'
+export const url = 'http://192.168.0.60:9000'
 export const urlapi = '../api/AjaxAPI/'

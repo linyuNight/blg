@@ -43,7 +43,7 @@
       }
     },
     activated() {
-      axios.get(urlapi + 'GetOrderDetail?OrderCode=' + localStorage.getItem("orderCode"))
+      axios.get(urlapi + 'GetOrderDetail?OrderCode=' + localStorage.getItem("orderCode") + '&ThirdId=' + this.$store.state.user.OpenId)
       // axios.get(url + '/orderDetail')
       .then(res => {
         this.orderDetail = res.data.Data
