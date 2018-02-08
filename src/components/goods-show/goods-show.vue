@@ -938,6 +938,7 @@
               }
               .goods-text-bottom-contain{
                 position:relative;
+                height:22px;
                 .new-prise{
                   float:left;
                   color:#444;
